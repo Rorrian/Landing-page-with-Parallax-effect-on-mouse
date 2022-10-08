@@ -5,9 +5,6 @@
 }
 
 :root {
-    /* Для реализации темной темы */
-    --black: #141414;
-
     /* Коэфф. размера экрана */
     --index: calc(1vw + 1vh); /* 1% от ширины и 1 % от высоты экрана*/
     --transition: 1.25s cubic-bezier(.2, .5, 0, 1);
@@ -105,7 +102,7 @@ body {
 .magic-list__item:hover .cursor {
     height: var(--height);
 }
-/* todo залить на гит */
+
 .cursor__image {
     position: relative;
     top: calc(var(--height) * -.4);
