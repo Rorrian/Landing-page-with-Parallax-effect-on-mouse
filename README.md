@@ -2,7 +2,7 @@
 
 * Parallax эффект при движении мыши
 * Отображение соответствующего фото при наведении на пункт меню
-* Использование counter-increment
+* counter-increment
 
 Deployment:  
 https://rorrian.github.io/Landing-page-with-Parallax-effect-on-mouse/
