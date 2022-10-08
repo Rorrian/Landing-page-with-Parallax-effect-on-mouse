@@ -1,0 +1,148 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Для реализации темной темы */
+    --black: #141414;
+
+    /* Коэфф. размера экрана */
+    --index: calc(1vw + 1vh); /* 1% от ширины и 1 % от высоты экрана*/
+    --transition: 1.25s cubic-bezier(.2, .5, 0, 1);
+    --transition-cursor: 2s cubic-bezier(.05, .5, 0, 1);
+}
+
+@font-face {
+    font-family: arsenal_f;
+    src: url(../fonts/arsenal-regular.woff2);
+}
+
+body {
+    background-color: #f0f0f0;
+}
+
+.magic-list {
+    font-family: arsenal_f, sans-serif;
+    font-size: calc(var(--index) * 2.75);
+    padding: calc(var(--index) * 2.75);
+}
+
+.magic-list__item {
+    cursor: none;
+    position: relative;
+    display: block;
+    padding: calc(var(--index) * 3) calc(var(--index) * 7.5);
+    border-bottom: 1px solid rgb(0 0 0 / .09);
+
+    counter-increment: my-counter;
+    line-height: .9;
+    color: var(--black);
+    text-decoration: none;
+}
+
+.magic-list__item:first-child {
+    border-top: 1.5px solid var(--black);
+}
+
+.magic-list__header {
+    width: min-content;
+    transition: transform var(--transition);
+    will-change: transform;
+}
+
+.magic-list__item::before {
+    content: "(0" counter(my-counter) ")";
+    position: absolute;
+    margin-left: calc(var(--index) * -2.25);
+    margin-top: calc(var(--index) / 2);
+
+    font-size: calc(var(--index) * .95);
+    letter-spacing: .5px;
+
+    transition: transform var(--transition);
+    transition-delay: .025s;
+    will-change: transform;
+}
+
+/* При наведении на пункт списка будем сдвигать заголовок */
+.magic-list__item:hover .magic-list__header,
+.magic-list__item:hover::before {
+    transform: translate3d(calc(var(--index) * -5), 0, 0);
+}
+
+.cursor {
+    --width: calc(var(--index) * 22);
+    --height: calc(var(--index) * 14);
+
+    /* Чтобы курсор-фото мог выходить за пределы своего родителя */
+    position: fixed;
+    width: var(--width);
+    /*
+    Реализация момента переключения фото на курсорах пунктов списка(каждый пункт - конкретное фото):
+    Момент смены фото сделан через HTML - у каждого пункта списка есть свой блок с курсором, в котором свое конкретное фото.
+    Поэтому на разных пунктах списка фото на курсоре меняется на соответствующее.
+    Анимация:
+    Изначально высота курсора с фото = 0. При наведении на пункт меню - высота рассчитывается и задается курсору с фото =
+    фото постепенно увеличивается(с transition).
+    */
+    height: 0;
+    /* Позиционируем фото чтобы курсор располагался по центру по высоте и ширине фото */
+    top: calc(var(--height) * -.5);
+    left: calc(var(--width) * -.5);
+    overflow: hidden;
+    /* Чтобы курсор с фото отображался "за" пунктом меню и не перекрывал его */
+    z-index: -1;
+
+    /* Перемещаем наш блок .cursor с фото в соответствии с координатами реального курсора */
+    transform: translate3d(var(--move-x), var(--move-y), 0);
+    transition: transform var(--transition-cursor), height 1s ease;
+    will-change: transform;
+}
+
+/* Реализация момента переключения фото на курсорах пунктов списка */
+.magic-list__item:hover .cursor {
+    height: var(--height);
+}
+/* todo залить на гит */
+.cursor__image {
+    position: relative;
+    top: calc(var(--height) * -.4);
+    left: calc(var(--width) * -.25);
+
+    width: calc(var(--width) * 2);
+    height: calc(var(--height) * 2);
+    background-size: cover;
+    background-position: center;
+
+    /*
+    Реализация параллакс-эффекта:
+    Изначально нам показывается фото на курсоре не полностью, а лишь бОльшая его срединная часть
+    (за счет того, что отображаемый блок .cursor меньше реального размера блока .cursor__image в 2 раза).
+    При приближении к краям экрана область отображаемого фото смещается соответственно:
+    при приближении к левому краю экрана - область фото смещается влево и на курсоре становится видно левый край фото, к правому аналогично.
+    Смена направления достигается с помощью деления на отрицательные значения.
+    */
+    /* Дополнительно при переключении фото(переходе между пунктами списка) меняем размер изображения */
+    --transform-cursor: translate3d(calc(var(--move-x) / -5), calc(var(--move-y) / -5), 0);
+    transform: var(--transform-cursor) scale(1.5);
+    transition: transform var(--transition-cursor);
+}
+
+.magic-list__item:hover .cursor__image {
+    transform: var(--transform-cursor) scale(1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
